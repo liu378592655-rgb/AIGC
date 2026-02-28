@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { personalInfo, categories } from "../data";
 import { Link } from "react-router-dom";
 import { ArrowRight, User, Briefcase, MapPin, Phone, Mail } from "lucide-react";
+import { getOptimizedUrl } from "../utils/image";
 
 export default function Home() {
   return (
@@ -53,7 +54,7 @@ export default function Home() {
           >
             {/* Using a placeholder image that fits the vibe */}
             <img 
-              src="https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png" 
+              src={getOptimizedUrl("https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png", 800)} 
               alt="Portrait" 
               className="w-full h-full object-cover opacity-80 mix-blend-luminosity hover:mix-blend-normal transition-all duration-700"
               referrerPolicy="no-referrer"
@@ -62,7 +63,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-
+      
       {/* Works Categories Section */}
       <section id="works" className="py-32 bg-[#1a2622] relative">
         <div className="max-w-7xl mx-auto px-6">
@@ -95,7 +96,7 @@ export default function Home() {
                   className="group block relative aspect-[3/4] rounded-3xl overflow-hidden bg-[#111a17]"
                 >
                   <img 
-                    src={cat.cover} 
+                    src={getOptimizedUrl(cat.cover, 800)} 
                     alt={cat.title}
                     className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                     referrerPolicy="no-referrer"

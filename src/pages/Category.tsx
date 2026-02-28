@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { categories } from "../data";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowLeft, X, ZoomIn } from "lucide-react";
+import { isVideo, getOptimizedUrl } from "../utils/image";
 
 export default function Category() {
   const { id } = useParams();
@@ -38,20 +39,6 @@ export default function Category() {
   
   // If custom images exist, use ONLY them. Otherwise, use generated images.
   const images = customImages.length > 0 ? customImages : generatedImages;
-
-  // Helper to check if URL is a video
-  const isVideo = (url: string) => {
-    return url.toLowerCase().endsWith('.mp4') || url.toLowerCase().endsWith('.webm');
-  };
-
-  // Helper to optimize image URLs using images.weserv.nl
-  const getOptimizedUrl = (url: string, width: number) => {
-    if (isVideo(url)) return url;
-    // Skip optimization for already optimized URLs or local paths if any
-    if (url.includes('images.weserv.nl') || !url.startsWith('http')) return url;
-    // Add errorredirect=ssl to fallback to original image if optimization fails
-    return `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=${width}&q=80&output=webp&errorredirect=ssl`;
-  };
 
   return (
     <div className="min-h-screen bg-[#f4f1eb] text-[#1a2622]">
@@ -118,6 +105,7 @@ export default function Category() {
                     loop
                     playsInline
                     autoPlay
+                    preload="metadata"
                   />
                 ) : (
                   <img 
@@ -182,6 +170,8 @@ export default function Category() {
                     controls
                     autoPlay
                     playsInline
+                    muted
+                    preload="auto"
                   />
                 ) : (
                   <img 

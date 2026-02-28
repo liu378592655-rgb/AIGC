@@ -153,19 +153,19 @@ export default function Category() {
               <X size={32} />
             </button>
 
-            <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-10" onClick={() => setSelectedImage(null)}>
+            <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-8" onClick={() => setSelectedImage(null)}>
               <motion.div
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="relative w-full max-w-6xl flex flex-col items-center"
+                className="relative w-full max-w-[95vw] flex flex-col items-center"
                 onClick={(e) => e.stopPropagation()}
               >
                 {isVideo(selectedImage.url) ? (
                   <video
                     src={selectedImage.url}
-                    className="w-full h-auto max-h-[80vh] rounded-lg shadow-2xl"
+                    className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
                     controls
                     autoPlay
                     playsInline
@@ -174,13 +174,13 @@ export default function Category() {
                   <img 
                     src={selectedImage.url} 
                     alt={selectedImage.title}
-                    className="w-full h-auto max-h-[80vh] rounded-lg shadow-2xl"
+                    className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
                     referrerPolicy="no-referrer"
                   />
                 )}
-                <div className="mt-6 text-center pb-10">
-                  <h3 className="text-2xl font-bold text-white mb-2">{selectedImage.title}</h3>
-                  <p className="text-[#c5a880] font-mono text-sm tracking-widest uppercase">AIGC Artwork</p>
+                <div className="mt-4 text-center">
+                  <h3 className="text-xl font-bold text-white mb-1">{selectedImage.title}</h3>
+                  <p className="text-[#c5a880] font-mono text-xs tracking-widest uppercase">AIGC Artwork</p>
                 </div>
               </motion.div>
             </div>

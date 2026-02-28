@@ -8,6 +8,7 @@ export default function Category() {
   const { id } = useParams();
   const category = categories.find((c) => c.id === id);
   const [selectedImage, setSelectedImage] = useState<{id: string | number, url: string, title: string} | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -43,13 +44,21 @@ export default function Category() {
     return url.toLowerCase().endsWith('.mp4') || url.toLowerCase().endsWith('.webm');
   };
 
+  // Helper to optimize image URLs using images.weserv.nl
+  const getOptimizedUrl = (url: string, width: number) => {
+    if (isVideo(url)) return url;
+    // Skip optimization for already optimized URLs or local paths if any
+    if (url.includes('images.weserv.nl') || !url.startsWith('http')) return url;
+    return `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=${width}&q=80&output=webp`;
+  };
+
   return (
     <div className="min-h-screen bg-[#f4f1eb] text-[#1a2622]">
       {/* Category Hero */}
       <section className="relative pt-32 pb-20 px-6 bg-[#1a2622] text-white overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img 
-            src={category.cover} 
+            src={getOptimizedUrl(category.cover, 1920)} 
             alt={category.title} 
             className="w-full h-full object-cover blur-sm"
             referrerPolicy="no-referrer"
@@ -94,7 +103,10 @@ export default function Category() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.5, delay: (idx % 3) * 0.1 }}
-                onClick={() => setSelectedImage(img)}
+                onClick={() => {
+                  setSelectedImage(img);
+                  setIsZoomed(false);
+                }}
                 className="break-inside-avoid relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 bg-white cursor-zoom-in"
               >
                 {isVideo(img.url) ? (
@@ -108,7 +120,7 @@ export default function Category() {
                   />
                 ) : (
                   <img 
-                    src={img.url} 
+                    src={getOptimizedUrl(img.url, 800)} 
                     alt={img.title}
                     className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
                     loading="lazy"
@@ -159,7 +171,7 @@ export default function Category() {
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="relative w-full max-w-[95vw] flex flex-col items-center"
+                className={`relative flex flex-col items-center transition-all duration-300 ${isZoomed ? "w-auto max-w-none" : "w-full max-w-[95vw]"}`}
                 onClick={(e) => e.stopPropagation()}
               >
                 {isVideo(selectedImage.url) ? (
@@ -172,9 +184,17 @@ export default function Category() {
                   />
                 ) : (
                   <img 
-                    src={selectedImage.url} 
+                    src={isZoomed ? selectedImage.url : getOptimizedUrl(selectedImage.url, 1600)} 
                     alt={selectedImage.title}
-                    className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
+                    className={`rounded-lg shadow-2xl transition-all duration-300 ${
+                      isZoomed 
+                        ? "max-w-none max-h-none cursor-zoom-out" 
+                        : "max-w-full max-h-[90vh] w-auto h-auto object-contain cursor-zoom-in"
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsZoomed(!isZoomed);
+                    }}
                     referrerPolicy="no-referrer"
                   />
                 )}

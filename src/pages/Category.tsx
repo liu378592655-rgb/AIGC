@@ -49,7 +49,8 @@ export default function Category() {
     if (isVideo(url)) return url;
     // Skip optimization for already optimized URLs or local paths if any
     if (url.includes('images.weserv.nl') || !url.startsWith('http')) return url;
-    return `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=${width}&q=80&output=webp`;
+    // Add errorredirect=ssl to fallback to original image if optimization fails
+    return `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=${width}&q=80&output=webp&errorredirect=ssl`;
   };
 
   return (

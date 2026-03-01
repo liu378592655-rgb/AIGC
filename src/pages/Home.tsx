@@ -78,7 +78,7 @@ export default function Home() {
               <h2 className="text-5xl md:text-6xl font-bold text-white">作品展示</h2>
             </div>
             <p className="text-white/50 max-w-sm text-lg">
-              探索四大核心领域的AIGC视觉创作，感受AI技术与商业设计的完美融合。
+              探索五大核心领域的AIGC视觉创作，感受AI技术与商业设计的完美融合。
             </p>
           </motion.div>
 

@@ -46,13 +46,18 @@ export const categories = [
       },
       {
         id: "appliance-2",
-        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/D2.jpg",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/D2.jpg?v=1",
         title: "智能家电系列 02"
       },
       {
         id: "appliance-3",
-        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/D3.jpg",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/D3.jpg?v=1",
         title: "智能家电系列 03"
+      },
+      {
+        id: "appliance-4",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/D4.jpg",
+        title: "智能家电系列 04"
       }
     ]
   },
@@ -65,12 +70,12 @@ export const categories = [
     customImages: [
       {
         id: "beauty-1",
-        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/M1.jpg",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/M1.jpg?v=1",
         title: "美妆系列 01"
       },
       {
         id: "beauty-2",
-        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/M2.jpg",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/M2.jpg?v=1",
         title: "美妆系列 02"
       },
       {
@@ -104,8 +109,13 @@ export const categories = [
     customImages: [
       {
         id: "home-1",
-        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/J1.jpg",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/J1.jpg?v=2",
         title: "家居系列 01"
+      },
+      {
+        id: "home-4",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/J4.jpg?v=1",
+        title: "家居系列 04"
       },
       {
         id: "home-2",
@@ -116,11 +126,6 @@ export const categories = [
         id: "home-3",
         url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/J3.jpg",
         title: "家居系列 03"
-      },
-      {
-        id: "home-4",
-        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/J4.jpg",
-        title: "家居系列 04"
       }
     ]
   },
@@ -128,7 +133,7 @@ export const categories = [
     id: "clothing",
     title: "服装",
     subtitle: "Fashion & Clothing",
-    cover: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/FZ.jpg",
+    cover: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/FZ.jpg?v=1",
     seed: "fashion",
     customImages: [
       {
@@ -140,6 +145,55 @@ export const categories = [
         id: "clothing-1",
         url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/F1.jpg",
         title: "服装系列 01"
+      },
+      {
+        id: "clothing-cover",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/FZ.jpg?v=1",
+        title: "服装系列展示"
+      },
+      {
+        id: "clothing-2",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/F2.jpg",
+        title: "服装系列 02"
+      },
+      {
+        id: "clothing-3",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/F3.jpg?v=1",
+        title: "服装系列 03"
+      }
+    ]
+  },
+  {
+    id: "digital",
+    title: "数码",
+    subtitle: "Digital Products",
+    cover: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/SM.jpg",
+    seed: "digital",
+    customImages: [
+      {
+        id: "digital-0",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/SM0.jpg",
+        title: "数码产品系列 01"
+      },
+      {
+        id: "digital-00",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/SM00.jpg",
+        title: "数码产品系列 02"
+      },
+      {
+        id: "digital-1",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/SM1.jpg",
+        title: "数码产品系列 03"
+      },
+      {
+        id: "digital-4-01",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/SM4_01.jpg?v=1",
+        title: "数码产品系列 04"
+      },
+      {
+        id: "digital-4-02",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/SM4_02.jpg?v=1",
+        title: "数码产品系列 05"
       }
     ]
   }

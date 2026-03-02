@@ -192,7 +192,7 @@ export const categories = [
       },
       {
         id: "digital-4-02",
-        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/SM4_02.jpg?v=1",
+        url: "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/SM4_02.jpg?v=2",
         title: "数码产品系列 05"
       }
     ]

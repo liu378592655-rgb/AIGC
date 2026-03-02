@@ -8,8 +8,8 @@ export const getOptimizedUrl = (url: string, width: number = 800) => {
   if (!url) return '';
   if (isVideo(url)) return url;
   
-  // Skip optimization for already optimized URLs or local paths or data URLs
-  if (url.includes('images.weserv.nl') || !url.startsWith('http') || url.startsWith('data:')) {
+  // Skip optimization for already optimized URLs, local paths, data URLs, or github URLs
+  if (url.includes('images.weserv.nl') || !url.startsWith('http') || url.startsWith('data:') || url.includes('github.com') || url.includes('githubusercontent.com')) {
     return url;
   }
   

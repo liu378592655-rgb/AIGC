@@ -129,7 +129,10 @@ export default function Home() {
             className="relative aspect-[3/4] w-full max-w-md mx-auto md:mr-0"
           >
              <div className="absolute inset-0 border border-[#c5a880]/30 rounded-full transform translate-x-4 translate-y-4" />
-             <div className="relative w-full h-full rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+             <div 
+                className="relative w-full h-full rounded-full overflow-hidden grayscale hover:grayscale-0 active:grayscale-0 focus:grayscale-0 transition-all duration-700 cursor-pointer"
+                tabIndex={0}
+             >
                 <img 
                   src={getOptimizedUrl("https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png", 800)} 
                   alt="Liu Chaojia" 
@@ -208,7 +211,10 @@ export default function Home() {
             <span className="block w-3 h-3 bg-[#0a0a0a] mb-8" />
             <h3 className="text-sm font-mono uppercase tracking-widest mb-12">个人简介</h3>
             
-            <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+            <div 
+              className="relative aspect-[3/4] w-full rounded-lg overflow-hidden mb-8 grayscale hover:grayscale-0 active:grayscale-0 focus:grayscale-0 transition-all duration-500 cursor-pointer"
+              tabIndex={0}
+            >
                <img 
                   src={getOptimizedUrl("https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png", 800)} 
                   alt="Profile" 

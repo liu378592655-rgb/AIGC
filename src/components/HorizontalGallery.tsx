@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { getOptimizedUrl } from "../utils/image";
 
 const imageUrls = [
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/032.png",
   "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/000.png",
   "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/0000.png",
   "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/000000.png",
@@ -55,13 +56,15 @@ function GalleryItem({
   index, 
   totalItems, 
   scrollYProgress, 
-  setSelectedId 
+  setSelectedId,
+  isMobile
 }: { 
   img: any, 
   index: number, 
   totalItems: number, 
   scrollYProgress: MotionValue<number>,
-  setSelectedId: (id: number) => void 
+  setSelectedId: (id: number) => void,
+  isMobile: boolean
 }) {
   // Calculate when this specific item is in the center of the scroll progress
   const centerProgress = index / (totalItems - 1);
@@ -109,12 +112,12 @@ function GalleryItem({
       // Use a very smooth, non-bouncy spring for the layout transition
       transition={{ type: "spring", bounce: 0, duration: 0.8 }}
       // Sharp edges (no rounded corners), tall aspect ratio
-      className="group relative h-[65vh] w-[18vw] shrink-0 overflow-hidden cursor-pointer origin-center"
+      className="group relative h-[50vh] md:h-[65vh] w-[60vw] md:w-[18vw] shrink-0 overflow-hidden cursor-pointer origin-center flex items-center justify-center bg-black/20"
     >
       <img
         src={getOptimizedUrl(img.url, 800)}
         alt={img.title}
-        className="h-full w-full object-cover"
+        className="max-h-full max-w-full object-contain"
         loading={index < 4 ? "eager" : "lazy"}
         decoding="async"
         referrerPolicy="no-referrer"
@@ -131,11 +134,23 @@ export default function HorizontalGallery() {
     offset: ["start start", "end end"]
   });
 
-  // Precise math for horizontal translation:
-  // Item Width: 18vw. Gap: 1vw. Total footprint per item: 19vw.
-  // Left padding to perfectly center the first item: 50vw - (18vw / 2) = 41vw.
-  // Total scroll distance to center the last item: (images.length - 1) * 19vw.
-  const totalScrollDistance = (images.length - 1) * 19;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Responsive math for horizontal translation:
+  const itemWidthVw = isMobile ? 60 : 18;
+  const gapVw = isMobile ? 4 : 1;
+  const stepVw = itemWidthVw + gapVw;
+  const paddingXVw = 50 - (itemWidthVw / 2); // Center the first item
+  
+  // Total scroll distance to center the last item
+  const totalScrollDistance = (images.length - 1) * stepVw;
   const x = useTransform(scrollYProgress, [0, 1], ["0vw", `-${totalScrollDistance}vw`]);
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -196,8 +211,8 @@ export default function HorizontalGallery() {
         </div>
 
         <motion.div 
-          style={{ x, transformStyle: "preserve-3d" }} 
-          className="flex gap-[1vw] px-[41vw]"
+          className="flex items-center h-full"
+          style={{ gap: `${gapVw}vw`, x, transformStyle: "preserve-3d", paddingLeft: `${paddingXVw}vw`, paddingRight: `${paddingXVw}vw` }}
         >
           {images.map((img, i) => (
             <GalleryItem 
@@ -207,6 +222,7 @@ export default function HorizontalGallery() {
               totalItems={images.length} 
               scrollYProgress={scrollYProgress} 
               setSelectedId={setSelectedId} 
+              isMobile={isMobile}
             />
           ))}
         </motion.div>

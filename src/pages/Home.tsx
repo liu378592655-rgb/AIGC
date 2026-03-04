@@ -140,6 +140,12 @@ export default function Home() {
                   loading="eager"
                   decoding="async"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png") {
+                      target.src = "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png";
+                    }
+                  }}
                 />
              </div>
           </motion.div>
@@ -222,6 +228,12 @@ export default function Home() {
                   loading="lazy"
                   decoding="async"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png") {
+                      target.src = "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png";
+                    }
+                  }}
                 />
             </div>
 

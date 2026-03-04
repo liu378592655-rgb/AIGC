@@ -134,6 +134,12 @@ const AutoScrollModal = ({
                 alt={image.title}
                 className="w-full h-auto block"
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== image.url) {
+                    target.src = image.url;
+                  }
+                }}
               />
               <div className="p-12 text-center pb-32">
                  <h2 className="text-3xl font-bold text-white mb-2">{image.title}</h2>
@@ -168,7 +174,7 @@ export default function Category() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollX = useMotionValue(0);
   const [constraints, setConstraints] = useState({ left: 0, right: 0 });
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -264,6 +270,12 @@ export default function Category() {
           alt="" 
           className="w-full h-full object-cover blur-3xl scale-110"
           referrerPolicy="no-referrer"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            if (target.src !== category.cover) {
+              target.src = category.cover;
+            }
+          }}
         />
       </div>
 
@@ -325,7 +337,7 @@ export default function Category() {
               whileHover={{ scale: isMobile ? 1 : 1.02 }}
               transition={{ duration: 0.4 }}
             >
-              <div className="w-full h-auto md:h-full overflow-hidden rounded-lg bg-black/20 relative flex items-center justify-center">
+              <div className="w-full min-h-[300px] h-auto md:h-full overflow-hidden rounded-lg bg-black/20 relative flex items-center justify-center">
                 {isVideo(img.url) ? (
                   <video
                     src={img.url}
@@ -340,9 +352,15 @@ export default function Category() {
                     src={getOptimizedUrl(img.url, 800)} 
                     alt={img.title}
                     className="w-full h-auto md:max-w-full md:max-h-full object-contain opacity-100 md:opacity-80 md:group-hover:opacity-100 transition-opacity duration-500"
-                    loading={idx < 4 ? "eager" : "lazy"}
+                    loading={isMobile ? "eager" : (idx < 4 ? "eager" : "lazy")}
                     decoding="async"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      if (target.src !== img.url) {
+                        target.src = img.url;
+                      }
+                    }}
                   />
                 )}
                 

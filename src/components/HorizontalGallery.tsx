@@ -118,9 +118,15 @@ function GalleryItem({
         src={getOptimizedUrl(img.url, 800)}
         alt={img.title}
         className="max-h-full max-w-full object-contain"
-        loading={index < 4 ? "eager" : "lazy"}
+        loading={isMobile ? "eager" : (index < 4 ? "eager" : "lazy")}
         decoding="async"
         referrerPolicy="no-referrer"
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          if (target.src !== img.url) {
+            target.src = img.url;
+          }
+        }}
       />
     </motion.div>
   );
@@ -134,7 +140,7 @@ export default function HorizontalGallery() {
     offset: ["start start", "end end"]
   });
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -306,6 +312,12 @@ export default function HorizontalGallery() {
                       loading="lazy"
                       decoding="async"
                       referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (target.src !== img.url) {
+                          target.src = img.url;
+                        }
+                      }}
                     />
                   </motion.div>
                   

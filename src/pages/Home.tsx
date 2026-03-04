@@ -65,12 +65,16 @@ const FloatingImage = ({ activeIndex, x, y }: { activeIndex: number | null, x: n
           src={getOptimizedUrl(cat.cover, 800)}
           alt={cat.title}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-0'}`}
+          loading="lazy"
+          decoding="async"
           referrerPolicy="no-referrer"
         />
       ))}
     </motion.div>
   );
 };
+
+import HorizontalGallery from "../components/HorizontalGallery";
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -84,7 +88,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#0a0a0a] text-[#e0e0e0] min-h-screen font-sans selection:bg-[#c5a880] selection:text-black cursor-none" ref={containerRef}>
+    <div className="bg-[#0a0a0a] text-[#e0e0e0] min-h-screen font-sans selection:bg-[#c5a880] selection:text-black" ref={containerRef}>
       <Cursor />
       
       {/* Noise Texture Overlay */}
@@ -130,6 +134,8 @@ export default function Home() {
                   src={getOptimizedUrl("https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png", 800)} 
                   alt="Liu Chaojia" 
                   className="w-full h-full object-cover"
+                  loading="eager"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                 />
              </div>
@@ -154,8 +160,11 @@ export default function Home() {
         />
       </section>
 
+      {/* Horizontal Gallery Section */}
+      <HorizontalGallery />
+
       {/* Works List Section */}
-      <section className="py-32 px-6 md:px-20 relative z-10" onMouseMove={handleMouseMove}>
+      <section id="works" className="py-32 px-6 md:px-20 relative z-10" onMouseMove={handleMouseMove}>
         <div className="mb-20 flex items-end justify-between">
           <h2 className="text-sm font-mono text-[#c5a880] uppercase tracking-widest">精选作品 (05)</h2>
           <div className="h-[1px] flex-1 bg-white/10 mx-8 mb-2" />
@@ -191,7 +200,7 @@ export default function Home() {
       </section>
 
       {/* About / Personal Info Section */}
-      <section className="py-32 px-6 md:px-20 bg-[#e0e0e0] text-[#0a0a0a]">
+      <section id="about" className="py-32 px-6 md:px-20 bg-[#e0e0e0] text-[#0a0a0a]">
         <div className="grid md:grid-cols-12 gap-12">
           
           {/* Left Column: Profile Header */}
@@ -204,6 +213,8 @@ export default function Home() {
                   src={getOptimizedUrl("https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/TX.png", 800)} 
                   alt="Profile" 
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                 />
             </div>
@@ -293,9 +304,12 @@ export default function Home() {
         <div>
           &copy; {new Date().getFullYear()} LIU CHAOJIA
         </div>
-        <div className="text-right">
+        <button 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="text-right hover:text-[#c5a880] transition-colors cursor-pointer"
+        >
           回到顶部
-        </div>
+        </button>
       </footer>
     </div>
   );

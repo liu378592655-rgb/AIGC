@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { personalInfo } from "../data";
 import { Menu, X } from "lucide-react";
@@ -7,11 +7,38 @@ import { useState, useEffect } from "react";
 export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Close menu on route change
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
+
+  // Handle hash navigation
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location]);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      const element = document.getElementById(hash.replace('#', ''));
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        // Update URL without reloading
+        window.history.pushState(null, '', `/${hash}`);
+      }
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#1a2622] text-[#e2e8f0] font-sans selection:bg-[#c5a880] selection:text-[#1a2622]">
@@ -25,8 +52,8 @@ export default function Layout() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wider">
             <Link to="/" className="hover:text-[#c5a880] transition-colors">首页 HOME</Link>
-            <a href="#about" className="hover:text-[#c5a880] transition-colors">关于 ABOUT</a>
-            <a href="#works" className="hover:text-[#c5a880] transition-colors">作品 WORKS</a>
+            <a href="/#about" onClick={(e) => handleNavClick(e, '#about')} className="hover:text-[#c5a880] transition-colors">关于 ABOUT</a>
+            <a href="/#works" onClick={(e) => handleNavClick(e, '#works')} className="hover:text-[#c5a880] transition-colors">作品 WORKS</a>
           </nav>
 
           {/* Mobile Menu Toggle */}
@@ -48,9 +75,9 @@ export default function Layout() {
               className="md:hidden bg-[#1a2622] border-b border-white/5 overflow-hidden"
             >
               <div className="px-6 py-4 flex flex-col gap-4 text-sm font-medium tracking-wider">
-                <Link to="/" className="hover:text-[#c5a880] transition-colors">首页 HOME</Link>
-                <a href="/#about" className="hover:text-[#c5a880] transition-colors">关于 ABOUT</a>
-                <a href="/#works" className="hover:text-[#c5a880] transition-colors">作品 WORKS</a>
+                <Link to="/" onClick={() => setIsMenuOpen(false)} className="hover:text-[#c5a880] transition-colors">首页 HOME</Link>
+                <a href="/#about" onClick={(e) => handleNavClick(e, '#about')} className="hover:text-[#c5a880] transition-colors">关于 ABOUT</a>
+                <a href="/#works" onClick={(e) => handleNavClick(e, '#works')} className="hover:text-[#c5a880] transition-colors">作品 WORKS</a>
               </div>
             </motion.nav>
           )}

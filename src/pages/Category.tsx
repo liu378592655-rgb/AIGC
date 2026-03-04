@@ -260,13 +260,13 @@ export default function Category() {
       {/* Header / Nav */}
       <header className="fixed top-0 left-0 w-full z-40 p-8 flex justify-between items-start pointer-events-none">
         <Link 
-          to="/#works" 
+          to="/" 
           className="pointer-events-auto inline-flex items-center gap-3 text-white/70 hover:text-[#c5a880] transition-colors group"
         >
           <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#c5a880] transition-colors">
             <ArrowLeft size={16} />
           </div>
-          <span className="uppercase tracking-widest text-xs font-medium">Back to Works</span>
+          <span className="uppercase tracking-widest text-xs font-medium">返回主页</span>
         </Link>
 
         <div className="text-right">
@@ -325,7 +325,8 @@ export default function Category() {
                     src={getOptimizedUrl(img.url, 800)} 
                     alt={img.title}
                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                    loading="lazy"
+                    loading={idx < 4 ? "eager" : "lazy"}
+                    decoding="async"
                     referrerPolicy="no-referrer"
                   />
                 )}

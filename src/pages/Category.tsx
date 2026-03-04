@@ -19,80 +19,58 @@ const AutoScrollModal = ({
   index: number
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isNavigating = useRef(false);
   const [progress, setProgress] = useState(0);
-  const [isScrollable, setIsScrollable] = useState(true);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Reset state on image change
   useEffect(() => {
-    isNavigating.current = false;
     setProgress(0);
+    setIsAtBottom(false);
+    setIsAutoScrolling(true);
+    setIsLoading(true);
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
     }
   }, [image.id]);
 
+  const checkScroll = () => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const maxScroll = el.scrollHeight - el.clientHeight;
+    if (maxScroll <= 10) {
+      setProgress(1);
+      setIsAtBottom(true);
+    } else {
+      setProgress(Math.min(el.scrollTop / maxScroll, 1));
+      setIsAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 10);
+    }
+  };
+
   // Handle video ending
   const handleVideoEnded = () => {
-    if (!isNavigating.current) {
-      isNavigating.current = true;
-      setTimeout(onNext, 500);
-    }
+    setIsAtBottom(true);
   };
 
   // Auto scroll logic
   useAnimationFrame((t, delta) => {
+    if (isLoading) return;
     const el = containerRef.current;
-    if (!el || isNavigating.current) return;
+    if (!el || isAtBottom || !isAutoScrolling) return;
 
     // Check if scrollable
-    if (el.scrollHeight <= el.clientHeight + 1) {
-      if (isScrollable) setIsScrollable(false);
+    if (el.scrollHeight <= el.clientHeight + 10) {
+      setIsAtBottom(true);
       return;
     }
 
-    if (!isScrollable) setIsScrollable(true);
-
     // Auto scroll speed (pixels per ms * delta)
-    // Adjust speed here. 0.08 is roughly 80px/sec
     const speed = 0.08 * delta;
     el.scrollTop += speed;
-
-    // Update progress
-    const maxScroll = el.scrollHeight - el.clientHeight;
-    if (maxScroll > 0) {
-      setProgress(Math.min(el.scrollTop / maxScroll, 1));
-    }
-
-    // Check if reached bottom
-    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 2) {
-      if (!isNavigating.current) {
-        isNavigating.current = true;
-        setTimeout(onNext, 1000); // Wait 1s at bottom before next
-      }
-    }
+    checkScroll();
   });
-
-  // Fallback for non-scrollable images
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    
-    const checkTimer = setInterval(() => {
-      if (isNavigating.current) return;
-      if (isVideo(image.url)) return; // Video handled by onEnded
-
-      if (el.scrollHeight <= el.clientHeight + 1) {
-        // Not scrollable, wait 3s then next
-        if (!isNavigating.current) {
-          isNavigating.current = true;
-          setTimeout(onNext, 3000);
-        }
-      }
-    }, 1000);
-
-    return () => clearInterval(checkTimer);
-  }, [image, onNext]);
 
   return (
     <motion.div
@@ -114,38 +92,88 @@ const AutoScrollModal = ({
         ref={containerRef}
         className="w-full h-full overflow-y-auto no-scrollbar"
         style={{ scrollBehavior: 'auto' }}
+        onScroll={checkScroll}
+        onWheel={() => setIsAutoScrolling(false)}
+        onTouchMove={() => setIsAutoScrolling(false)}
+        onMouseDown={() => setIsAutoScrolling(false)}
       >
-        <div className="w-full min-h-full flex flex-col items-center">
+        <div className="w-full min-h-full flex flex-col items-center relative">
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
+              <div className="w-8 h-8 border-2 border-[#c5a880] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
           {isVideo(image.url) ? (
-            <div className="w-full h-screen flex items-center justify-center bg-black">
+            <div className="w-full h-screen flex flex-col items-center justify-center bg-black relative">
               <video
+                key={`video-${image.id}`}
                 src={image.url}
-                className="w-full h-full object-contain"
+                className={`w-full h-full object-contain transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
                 autoPlay
                 playsInline
                 muted={false}
                 onEnded={handleVideoEnded}
+                onLoadedData={() => {
+                  setIsLoading(false);
+                  checkScroll();
+                }}
+                onError={() => setIsLoading(false)}
               />
+              <AnimatePresence>
+                {isAtBottom && !isLoading && (
+                  <motion.button
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    onClick={onNext}
+                    className="absolute bottom-12 px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full flex items-center gap-3 transition-colors border border-white/20 z-50"
+                  >
+                    <span className="tracking-widest uppercase text-sm">下一张 Next</span>
+                    <ArrowRight size={18} />
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
           ) : (
-            <div className="w-full max-w-4xl mx-auto bg-black min-h-screen relative">
+            <div className="w-full max-w-4xl mx-auto bg-black min-h-screen relative flex flex-col">
                <img 
+                key={`img-${image.id}`}
                 src={getOptimizedUrl(image.url, 1920)} 
                 alt={image.title}
-                className="w-full h-auto block"
+                className={`w-full h-auto block transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
                 referrerPolicy="no-referrer"
                 onError={(e) => {
+                  setIsLoading(false);
                   const target = e.target as HTMLImageElement;
                   if (target.src !== image.url) {
                     target.src = image.url;
                   }
                 }}
+                onLoad={() => {
+                  setIsLoading(false);
+                  checkScroll();
+                }}
               />
-              <div className="p-12 text-center pb-32">
+              <div className={`p-12 text-center pb-32 flex-grow flex flex-col items-center justify-end transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
                  <h2 className="text-3xl font-bold text-white mb-2">{image.title}</h2>
-                 <p className="text-[#c5a880] font-mono text-sm tracking-widest uppercase">
+                 <p className="text-[#c5a880] font-mono text-sm tracking-widest uppercase mb-12">
                    {index + 1} / {total}
                  </p>
+                 
+                 <AnimatePresence>
+                   {isAtBottom && !isLoading && (
+                     <motion.button
+                       initial={{ opacity: 0, y: 20 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       exit={{ opacity: 0, y: 20 }}
+                       onClick={onNext}
+                       className="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full flex items-center gap-3 transition-colors border border-white/20 mx-auto z-50"
+                     >
+                       <span className="tracking-widest uppercase text-sm">下一张 Next</span>
+                       <ArrowRight size={18} />
+                     </motion.button>
+                   )}
+                 </AnimatePresence>
               </div>
             </div>
           )}
@@ -173,6 +201,7 @@ export default function Category() {
   // Horizontal scroll logic
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollX = useMotionValue(0);
+  const targetX = useRef(0);
   const [constraints, setConstraints] = useState({ left: 0, right: 0 });
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
 
@@ -195,8 +224,19 @@ export default function Category() {
         const windowWidth = window.innerWidth;
         // If content is wider than window, allow scrolling
         // Negative value because we translate left
-        const maxScroll = -(containerWidth - windowWidth + 200); // Extra padding
+        const maxScroll = Math.min(0, -(containerWidth - windowWidth + 200)); // Extra padding
         setConstraints({ left: maxScroll, right: 0 });
+        
+        // Clamp current scroll position if it's out of bounds after resize
+        const currentX = scrollX.get();
+        if (currentX < maxScroll) {
+          scrollX.set(maxScroll);
+          targetX.current = maxScroll;
+        }
+        if (currentX > 0) {
+          scrollX.set(0);
+          targetX.current = 0;
+        }
       }
     };
 
@@ -220,15 +260,17 @@ export default function Category() {
       // Only hijack scroll if no modal is open
       if (selectedIndex !== null) return;
 
-      // Determine if we should scroll horizontally
-      // If we are at the boundaries, we might want to allow normal vertical scroll?
-      // For this specific "immersive" design, usually we lock vertical scroll 
-      // and map it purely to horizontal movement for the gallery section.
+      // Prevent default vertical scrolling to avoid layout jumping
+      e.preventDefault();
+
+      // Accumulate target position for smooth scrolling
+      targetX.current = targetX.current - e.deltaY;
       
-      const newX = scrollX.get() - e.deltaY;
-      // Clamp value
-      const clampedX = Math.max(constraints.left, Math.min(constraints.right, newX));
-      animate(scrollX, clampedX, { type: "spring", stiffness: 400, damping: 50 });
+      // Clamp target value
+      targetX.current = Math.max(constraints.left, Math.min(constraints.right, targetX.current));
+      
+      // Use tween animation for smooth, non-jittery scrolling
+      animate(scrollX, targetX.current, { type: "tween", ease: "easeOut", duration: 0.3 });
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
@@ -310,6 +352,10 @@ export default function Category() {
           drag={isMobile ? false : "x"}
           dragConstraints={constraints}
           dragElastic={0.1}
+          onDrag={(e, info) => {
+            // Keep targetX in sync with drag
+            targetX.current = scrollX.get();
+          }}
         >
           {/* Intro Text Card */}
           <div className="w-full md:min-w-[400px] md:max-w-[400px] md:mr-12 mb-8 md:mb-0 text-center md:text-left">

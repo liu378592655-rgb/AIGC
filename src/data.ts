@@ -1,14 +1,14 @@
 export const personalInfo = {
   name: "刘晁佳",
-  title: "设计总监 / 经理",
+  title: "AI视觉设计师",
   basic: [
     "男 / 籍贯 揭阳",
     "非党员",
     "11年工作经验"
   ],
   intention: {
-    role: "设计总监/经理",
-    salary: "20-30K",
+    role: "AIGC视觉设计师",
+    salary: "25k",
     city: "广州"
   },
   contact: {

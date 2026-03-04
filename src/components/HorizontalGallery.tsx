@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, MotionValue } from "motion/react";
 import { X } from "lucide-react";
+import { getOptimizedUrl } from "../utils/image";
 
 const imageUrls = [
   "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/000.png",
@@ -111,7 +112,7 @@ function GalleryItem({
       className="group relative h-[65vh] w-[18vw] shrink-0 overflow-hidden cursor-pointer origin-center"
     >
       <img
-        src={img.url}
+        src={getOptimizedUrl(img.url, 800)}
         alt={img.title}
         className="h-full w-full object-cover"
         loading={index < 4 ? "eager" : "lazy"}
@@ -283,7 +284,7 @@ export default function HorizontalGallery() {
                     style={{ maxWidth: '85vw', maxHeight: '80vh' }}
                   >
                      <img
-                      src={img.url}
+                      src={getOptimizedUrl(img.url, 1920)}
                       alt={img.title}
                       className="w-auto h-auto max-w-full max-h-[80vh] object-contain"
                       loading="lazy"

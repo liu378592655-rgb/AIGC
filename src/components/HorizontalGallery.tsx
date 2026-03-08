@@ -38,7 +38,27 @@ const imageUrls = [
   "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/027.png",
   "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/028.png",
   "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/029.png",
-  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/030.png"
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/030.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/033.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/034.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/035.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/036.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/037.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/038.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/039.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/040.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/041.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/042.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/043.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/044.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/045.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/046.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/047.jpg",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/048.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/049.jpg",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/050.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/051.png",
+  "https://github.com/liu378592655-rgb/AIGC/releases/download/AIGC/052.png"
 ];
 
 const images = imageUrls.map((url, i) => ({
